@@ -11,8 +11,3 @@ Next, publish the package default config:
 ```
 php artisan vendor:publish --provider="Revisionable\RevisionableServiceProvider" --tag="config"
 ```
-
-Then generate the include file with
-```
-php artisan vue-i18n:generate
-```

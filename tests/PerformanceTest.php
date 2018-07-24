@@ -13,13 +13,6 @@ class PerformanceTest extends TestCase
 {
     use WithFaker;
     
-    public function setUp()
-    {
-        $this->markTestSkipped(
-            'Does not support mongo db'
-        );
-    }
-
     public function testInsertQueryMessurements()
     {
         DB::connection()->enableQueryLog();
