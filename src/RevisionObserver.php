@@ -3,6 +3,7 @@
 namespace Revisionable;
 
 use Revisionable\Contracts\RevisionableContract;
+use MongoDB\BSON\ObjectId;
 
 /**
  * Class RevisionObserver
@@ -95,7 +96,7 @@ class RevisionObserver
         // Reset intrinsic model data. So we are
         // able to save this model as a new
         // dataset in the table.
-        $model->{$model->getKeyName()} = null;
+        $model->{$model->getKeyName()} = new ObjectId();
         $model->exists = false;
 
         // Store the model.

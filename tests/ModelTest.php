@@ -3,6 +3,8 @@
 namespace Revisionable\Tests;
 
 use App\Entities\House;
+use App\Entities\HouseAttribute;
+use App\Entities\HouseAttributeCosts;
 use Revisionable\LatestRevisionScope;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -16,7 +18,7 @@ class ModelTest extends TestCase
         $house = $this->prepareTestData(1);
 
         $this->assertNull($house->revision_id);
-        $this->assertEquals($house->revision_version, 1);
+        $this->assertEquals(1, $house->revision_version);
 
         $this->assertNull($house->previousRevision());
         $this->assertNull($house->nextRevision());
@@ -32,8 +34,8 @@ class ModelTest extends TestCase
 
         $house->update(['name' => $this->faker->domainWord]);
 
-        $this->assertEquals($house->revision_id, $firstHouse->id);
-        $this->assertEquals($house->revision_version, 2);
+        $this->assertEquals($firstHouse->id, $house->revision_id);
+        $this->assertEquals(2, $house->revision_version);
 
         $this->assertNotNull($house->previousRevision());
         $this->assertNull($house->nextRevision());
@@ -50,12 +52,14 @@ class ModelTest extends TestCase
         $house = $this->prepareTestData(5);
 
         $revisioned = $house->revision(3)->first();
+        $this->assertNotNull($revisioned);
+
         $success = $revisioned->rollback();
 
         $revisioned->fresh();
 
         $this->assertTrue($success);
-        $this->assertEquals($revisioned->revision_version, 3);
+        $this->assertEquals(3, $revisioned->revision_version);
 
         $this->assertNotNull($revisioned->previousRevision());
         $this->assertNull($revisioned->nextRevision());
@@ -125,8 +129,9 @@ class ModelTest extends TestCase
         $house = $this->prepareTestData(5);
 
         $revisioned = $house->revision(3)->first();
+        $this->assertNotNull($revisioned);
 
-        $this->assertEquals($revisioned->revision_version, 3);
+        $this->assertEquals(3, $revisioned->revision_version);
 
         $this->assertNotNull($revisioned->previousRevision());
         $this->assertNotNull($revisioned->nextRevision());
@@ -141,7 +146,7 @@ class ModelTest extends TestCase
 
         $revisioned = $house->latestRevision()->first();
 
-        $this->assertEquals($revisioned->revision_version, 5);
+        $this->assertEquals(5, $revisioned->revision_version);
 
         $this->assertNotNull($revisioned->previousRevision());
         $this->assertNull($revisioned->nextRevision());
@@ -156,7 +161,7 @@ class ModelTest extends TestCase
 
         $revisioned = $house->firstRevision()->first();
 
-        $this->assertEquals($revisioned->revision_version, 1);
+        $this->assertEquals(1, $revisioned->revision_version);
 
         $this->assertNull($revisioned->previousRevision());
         $this->assertNotNull($revisioned->nextRevision());
@@ -177,7 +182,7 @@ class ModelTest extends TestCase
     protected function prepareTestData($revs)
     {
         $house = factory(House::class)->make();
-        
+
         for ($i = 1; $i < $revs; $i++) {
             $house->update(['name' => $this->faker->domainWord]);
         }

@@ -30,9 +30,9 @@ interface RevisionableContract
      * This refers to the id of the
      * original model.
      *
-     * @return int
+     * @return string
      */
-    public function getRevisionId() : ?int;
+    public function getRevisionId() : ?string;
 
     /**
      * Gets the revision version column name.
