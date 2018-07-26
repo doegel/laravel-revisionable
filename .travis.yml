@@ -1,0 +1,16 @@
+language: php
+
+php:
+  - 7.2
+
+services: mongodb
+
+sudo: false
+
+install:
+  - composer install --no-interaction --prefer-source
+
+before_script:
+  - sleep 15
+
+script: vendor/bin/phpunit

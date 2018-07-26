@@ -2,17 +2,23 @@
 
 namespace Revisionable\Tests;
 
-use App\Entities\House;
-use Illuminate\Support\Debug\Dumper;
 use Illuminate\Support\Facades\DB;
 use Revisionable\Contracts\RevisionableContract;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Revisionable\Tests\Models\House;
 
 class PerformanceTest extends TestCase
 {
     use WithFaker;
-    
+
+    protected function tearDown()
+    {
+        // Since we can not use Refresh database trait for mongodb.
+        House::truncate();
+
+        parent::tearDown();
+    }
+
     public function testInsertQueryMessurements()
     {
         DB::connection()->enableQueryLog();

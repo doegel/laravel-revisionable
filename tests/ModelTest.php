@@ -2,16 +2,21 @@
 
 namespace Revisionable\Tests;
 
-use App\Entities\House;
-use App\Entities\HouseAttribute;
-use App\Entities\HouseAttributeCosts;
 use Revisionable\LatestRevisionScope;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Revisionable\Tests\Models\House;
 
 class ModelTest extends TestCase
 {
     use WithFaker;
+
+    protected function tearDown()
+    {
+        // Since we can not use Refresh database trait for mongodb.
+        House::truncate();
+
+        parent::tearDown();
+    }
 
     public function testInsertFirstRevision()
     {
@@ -145,6 +150,7 @@ class ModelTest extends TestCase
         $house = $this->prepareTestData(5);
 
         $revisioned = $house->latestRevision()->first();
+        $this->assertNotNull($revisioned);
 
         $this->assertEquals(5, $revisioned->revision_version);
 
@@ -160,6 +166,7 @@ class ModelTest extends TestCase
         $house = $this->prepareTestData(5);
 
         $revisioned = $house->firstRevision()->first();
+        $this->assertNotNull($revisioned);
 
         $this->assertEquals(1, $revisioned->revision_version);
 
@@ -181,7 +188,7 @@ class ModelTest extends TestCase
 
     protected function prepareTestData($revs)
     {
-        $house = factory(House::class)->make();
+        $house = House::create(['name' => $this->faker->domainWord]);
 
         for ($i = 1; $i < $revs; $i++) {
             $house->update(['name' => $this->faker->domainWord]);
