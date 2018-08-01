@@ -11,6 +11,8 @@ use Revisionable\LatestRevisionScope;
  */
 trait RevisionableTrait
 {
+    use HasRelationships;
+
     /**
      * Controls whenever a revision is saved.
      *
@@ -267,5 +269,15 @@ trait RevisionableTrait
             return $query->where($this->getKeyName(), $this->getRevisionId())
                 ->orWhere($this->getRevisionIdName(), $this->getRevisionId());
         }
+    }
+
+    /**
+     * Returns whenever a model is a revisioned one.
+     * 
+     * @return bool
+     */
+    private function isRevisioned(): bool
+    {
+        return $this->getRevisionId() !== null;
     }
 }

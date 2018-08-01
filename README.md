@@ -11,3 +11,8 @@ Next, publish the package default config:
 ```
 php artisan vendor:publish --provider="Revisionable\RevisionableServiceProvider" --tag="config"
 ```
+
+## Tests
+
+1. Spin up docker `docker-compose up -d`
+2. Run `vendor/bin/phpunit` in project root

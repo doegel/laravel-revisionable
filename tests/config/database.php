@@ -8,7 +8,7 @@ return [
             'name'       => 'mongodb',
             'driver'     => 'mongodb',
             'host'       => 'localhost',
-            'database'   => 'unittest',
+            'database'   => 'testing',
         ],
 
     ],
